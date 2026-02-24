@@ -4,16 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LRCLIB Lyrics Publisher</title>
-    
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -26,8 +20,6 @@
                             surfaceHigh: '#2B2930',
                             primary: '#D0BCFF',
                             onPrimary: '#381E72',
-                            primaryContainer: '#4F378B',
-                            onPrimaryContainer: '#EADDFF',
                             secondaryContainer: '#4A4458',
                             onSecondaryContainer: '#E8DEF8',
                             tertiaryContainer: '#633B48',
@@ -42,33 +34,27 @@
                             onSuccessContainer: '#C4EED0',
                         }
                     },
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    }
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
             }
         }
     </script>
-
     <style>
         body { background-color: #141218; }
         textarea::-webkit-scrollbar { width: 12px; }
         textarea::-webkit-scrollbar-track { background: #211F26; border-radius: 8px; }
         textarea::-webkit-scrollbar-thumb { background-color: #49454F; border-radius: 20px; border: 3px solid #211F26; }
         
-        .loader {
-            border-top-color: transparent;
-            -webkit-animation: spinner 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            animation: spinner 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        /* Animated Stripe for Progress Bar */
+        .progress-stripe {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem;
+            animation: progress-stripes 1s linear infinite;
         }
-        @keyframes spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes progress-stripes { from { background-position: 1rem 0; } to { background-position: 0 0; } }
     </style>
 </head>
-<body class="text-md-onSurface font-sans antialiased selection:bg-md-primary selection:text-md-onPrimary min-h-screen py-8 px-4 flex justify-center items-center">
+<body class="text-md-onSurface font-sans antialiased min-h-screen py-8 px-4 flex justify-center items-center">
     
     <div class="w-full max-w-5xl bg-md-surface rounded-[32px] shadow-2xl overflow-hidden border border-md-outlineVariant">
         
@@ -80,7 +66,7 @@
         <div class="px-10 pb-10 space-y-8">
             
             <!-- File Upload -->
-            <div class="bg-md-secondaryContainer text-md-onSecondaryContainer p-6 rounded-[28px] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all">
+            <div class="bg-md-secondaryContainer text-md-onSecondaryContainer p-6 rounded-[28px] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div class="flex items-start gap-4">
                     <div class="bg-md-bg/30 p-3 rounded-full mt-1">
                         <svg class="w-6 h-6 text-md-onSecondaryContainer" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -97,69 +83,47 @@
                 </label>
             </div>
 
-            <!-- Message Box -->
             <div id="messageBox" class="hidden rounded-2xl p-5 text-[15px] font-medium transition-all transform duration-300"></div>
 
             <form id="publishForm" class="space-y-8">
-                <!-- Metadata -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Track Name <span class="text-md-errorContainer">*</span></label>
-                        <input type="text" id="trackName" required placeholder="Bohemian Rhapsody" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh">
-                    </div>
-                    <div>
-                        <label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Artist Name <span class="text-md-errorContainer">*</span></label>
-                        <input type="text" id="artistName" required placeholder="Queen" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh">
-                    </div>
-                    <div>
-                        <label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Album Name <span class="text-md-errorContainer">*</span></label>
-                        <input type="text" id="albumName" required placeholder="A Night at the Opera" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh">
-                    </div>
-                    <div>
-                        <label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Duration <span class="text-md-errorContainer">*</span></label>
-                        <input type="text" id="duration" required placeholder="Seconds (354) or Timecode (05:54)" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh">
-                    </div>
+                    <div><label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Track Name <span class="text-md-errorContainer">*</span></label><input type="text" id="trackName" required placeholder="Bohemian Rhapsody" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></div>
+                    <div><label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Artist Name <span class="text-md-errorContainer">*</span></label><input type="text" id="artistName" required placeholder="Queen" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></div>
+                    <div><label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Album Name <span class="text-md-errorContainer">*</span></label><input type="text" id="albumName" required placeholder="A Night at the Opera" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></div>
+                    <div><label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Duration <span class="text-md-errorContainer">*</span></label><input type="text" id="duration" required placeholder="Seconds (354) or Timecode (05:54)" class="w-full bg-md-bg border border-md-outline text-md-onSurface rounded-2xl p-4 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></div>
                 </div>
                 
-                <div class="bg-md-surfaceHigh text-md-onSurfaceVariant px-5 py-4 rounded-2xl flex items-center text-sm gap-3 border border-md-outlineVariant">
-                    <svg class="w-5 h-5 text-md-primary flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                    <span>Leave lyrics fields empty to mark as <strong>Instrumental</strong>.</span>
-                </div>
-
-                <!-- Lyrics -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flex flex-col h-full">
-                        <label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Plain Lyrics</label>
-                        <textarea id="plainLyrics" rows="14" placeholder="Is this the real life?..." class="w-full h-full bg-md-bg border border-md-outline text-md-onSurface rounded-[24px] p-5 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors font-mono text-[13px] leading-relaxed resize-y placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></textarea>
-                    </div>
-                    <div class="flex flex-col h-full">
-                        <label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Synchronized Lyrics</label>
-                        <textarea id="syncedLyrics" rows="14" placeholder="[00:00.00] Is this the real life?..." class="w-full h-full bg-md-bg border border-md-outline text-md-onSurface rounded-[24px] p-5 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors font-mono text-[13px] leading-relaxed resize-y placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></textarea>
-                    </div>
+                    <div class="flex flex-col h-full"><label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Plain Lyrics</label><textarea id="plainLyrics" rows="14" class="w-full h-full bg-md-bg border border-md-outline text-md-onSurface rounded-[24px] p-5 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors font-mono text-[13px] leading-relaxed resize-y placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></textarea></div>
+                    <div class="flex flex-col h-full"><label class="block text-md-onSurfaceVariant text-sm font-medium mb-2 pl-1">Synchronized Lyrics</label><textarea id="syncedLyrics" rows="14" class="w-full h-full bg-md-bg border border-md-outline text-md-onSurface rounded-[24px] p-5 focus:border-md-primary focus:ring-1 focus:ring-md-primary outline-none transition-colors font-mono text-[13px] leading-relaxed resize-y placeholder-md-outlineVariant hover:bg-md-surfaceHigh"></textarea></div>
                 </div>
 
-                <!-- Proxy Toggle -->
                 <div class="bg-md-tertiaryContainer text-md-onTertiaryContainer rounded-[24px] p-5 flex items-center shadow-sm">
                     <label class="relative flex items-center cursor-pointer p-1">
                         <input type="checkbox" id="useProxy" class="peer sr-only" checked>
-                        <div class="w-11 h-6 bg-md-bg/50 rounded-full peer peer-checked:bg-md-primary transition-all relative">
-                            <div class="absolute left-1 top-1 w-4 h-4 bg-md-onSurface rounded-full transition-all peer-checked:translate-x-5 peer-checked:bg-md-onPrimary"></div>
-                        </div>
+                        <div class="w-11 h-6 bg-md-bg/50 rounded-full peer peer-checked:bg-md-primary transition-all relative"><div class="absolute left-1 top-1 w-4 h-4 bg-md-onSurface rounded-full transition-all peer-checked:translate-x-5 peer-checked:bg-md-onPrimary"></div></div>
                     </label>
-                    <div class="ml-4">
-                        <p class="font-semibold text-[15px]">Bypass Browser CORS</p>
-                        <p class="text-sm opacity-80 mt-0.5">Keep active if running locally to use corsproxy.io.</p>
+                    <div class="ml-4"><p class="font-semibold text-[15px]">Bypass Browser CORS</p><p class="text-sm opacity-80 mt-0.5">Keep active if running locally.</p></div>
+                </div>
+
+                <!-- PROGRESS SECTION -->
+                <div id="progressSection" class="hidden bg-md-surfaceHigh p-6 rounded-[32px] border border-md-outlineVariant animate-pulse">
+                    <div class="flex justify-between items-center mb-2">
+                        <span id="miningStatusText" class="text-md-primary font-bold">Mining Proof of Work...</span>
+                        <span id="hashRateText" class="text-md-onSurfaceVariant font-mono text-sm">0 H/s</span>
+                    </div>
+                    <!-- The Bar -->
+                    <div class="w-full bg-md-bg rounded-full h-4 overflow-hidden border border-md-outlineVariant/50">
+                        <div id="progressBar" class="bg-md-primary h-full progress-stripe transition-all duration-300" style="width: 1%"></div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-xs text-md-onSurfaceVariant/70 font-mono">
+                        <span id="totalHashesText">0 Hashes</span>
+                        <span id="elapsedTimeText">00:00</span>
                     </div>
                 </div>
 
-                <!-- Submit & Status -->
-                <div class="bg-md-surfaceHigh p-4 md:p-6 rounded-[32px] flex flex-col sm:flex-row items-center justify-between border border-md-outlineVariant">
-                    <div id="status" class="hidden flex items-center text-md-primary font-medium mb-4 sm:mb-0 px-2 w-full">
-                        <div class="loader ease-linear rounded-full border-[3px] border-md-primary h-6 w-6 mr-3 flex-shrink-0"></div>
-                        <span id="statusText" class="truncate text-[15px]">Initializing...</span>
-                    </div>
-                    <div id="statusFiller" class="w-full sm:w-auto"></div>
-                    
+                <!-- Action Bar -->
+                <div id="actionBar" class="bg-md-surfaceHigh p-4 md:p-6 rounded-[32px] flex flex-col sm:flex-row items-center justify-end border border-md-outlineVariant">
                     <button type="submit" id="submitBtn" class="w-full sm:w-auto flex-shrink-0 bg-md-primary text-md-onPrimary font-bold text-lg py-3.5 px-10 rounded-full hover:bg-[#EADDFF] hover:shadow-[0_0_20px_rgba(208,188,255,0.15)] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                         Publish Track
                     </button>
@@ -168,87 +132,48 @@
         </div>
     </div>
 
-    <!-- MAIN SCRIPT -->
     <script>
-        /* ================= WORKER CODE (Embedded as String for Perf) ================= */
+        // --- WORKER SCRIPT (Embedded) ---
         const workerScript = `
         self.onmessage = async function(e) {
             const { prefix, target, startNonce, step } = e.data;
             const enc = new TextEncoder();
-            
-            // PRE-ALLOCATION: Avoid garbage collection
             const prefixBytes = enc.encode(prefix);
             const prefixLen = prefixBytes.length;
-            
-            // Parse Target into Bytes (Fast Compare)
             const targetBytes = new Uint8Array(32);
-            for (let i = 0; i < 32; i++) {
-                targetBytes[i] = parseInt(target.slice(i * 2, i * 2 + 2), 16);
-            }
-
-            // Buffer for hashing: Prefix + Max Nonce Digits (approx 20 chars safety)
+            for (let i = 0; i < 32; i++) targetBytes[i] = parseInt(target.slice(i * 2, i * 2 + 2), 16);
+            
             const dataBuffer = new Uint8Array(prefixLen + 20);
-            dataBuffer.set(prefixBytes); // Copy prefix once
-
+            dataBuffer.set(prefixBytes);
+            
             let nonce = startNonce;
             let count = 0;
-
+            
             while (true) {
-                // Write nonce bytes into buffer efficiently
                 const nonceStr = nonce.toString();
                 const nonceLen = nonceStr.length;
+                for (let i = 0; i < nonceLen; i++) dataBuffer[prefixLen + i] = nonceStr.charCodeAt(i);
                 
-                // Manual ASCII encoding for numbers is faster than TextEncoder in a loop
-                for (let i = 0; i < nonceLen; i++) {
-                    dataBuffer[prefixLen + i] = nonceStr.charCodeAt(i);
-                }
-
-                // Slice the exact view we need to hash
-                const dataToHash = dataBuffer.subarray(0, prefixLen + nonceLen);
-
-                // NATIVE HASHING
-                const hashBuffer = await self.crypto.subtle.digest('SHA-256', dataToHash);
+                const hashBuffer = await self.crypto.subtle.digest('SHA-256', dataBuffer.subarray(0, prefixLen + nonceLen));
                 const hashView = new Uint8Array(hashBuffer);
-
-                // BYTE-LEVEL COMPARE (Instant)
+                
                 let valid = true;
-                // We compare standard big-endian sha256 bytes against target
-                // If hash > target, we stop.
-                // Logic: Find first byte that differs.
                 for (let i = 0; i < 32; i++) {
-                    if (hashView[i] < targetBytes[i]) {
-                        break; // Definitely smaller (valid)
-                    }
-                    if (hashView[i] > targetBytes[i]) {
-                        valid = false; // Definitely larger (invalid)
-                        break;
-                    }
-                    // if equal, continue to next byte
+                    if (hashView[i] < targetBytes[i]) break;
+                    if (hashView[i] > targetBytes[i]) { valid = false; break; }
                 }
 
-                if (valid) {
-                    self.postMessage({ found: true, nonce: nonceStr });
-                    return;
-                }
-
+                if (valid) { self.postMessage({ found: true, nonce: nonceStr }); return; }
+                
                 nonce += step;
                 count++;
-
-                // Report progress every 5000 hashes to avoid flooding main thread
-                if (count % 5000 === 0) {
-                    self.postMessage({ found: false, count: 5000 });
-                    count = 0;
-                }
+                if (count % 10000 === 0) { self.postMessage({ found: false, count: 10000 }); count = 0; }
             }
-        };
-        `;
-
+        };`;
         const workerBlob = new Blob([workerScript], { type: 'application/javascript' });
         const workerUrl = URL.createObjectURL(workerBlob);
 
-        // ================= UI LOGIC =================
-
-        // Auto-fill Logic
+        // --- UI LOGIC ---
         document.getElementById('lrcFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -256,23 +181,18 @@
             reader.onload = function(evt) {
                 const content = evt.target.result;
                 const getTag = (tag) => (content.match(new RegExp(`\\[${tag}:(.*?)\\]`, 'i')) || [])[1]?.trim();
-                
                 const map = { trackName: 'ti', artistName: 'ar', albumName: 'al', duration: 'length' };
                 let count = 0;
                 for (let [id, tag] of Object.entries(map)) {
                     const val = getTag(tag);
                     if (val) { document.getElementById(id).value = val; count++; }
                 }
-
                 document.getElementById('syncedLyrics').value = content.trim();
-                
-                // Plain lyrics extraction
                 const plainText = content.split(/\r?\n/)
                     .map(l => l.trim())
-                    .filter(l => !/^\[[a-z]+:/.test(l)) // remove metadata
-                    .map(l => l.replace(/\[\d+:\d+(?:\.\d+)?\]/g, '').trim()) // remove timestamps
-                    .join('\n').replace(/^\n+|\n+$/g, ''); // trim ends
-                    
+                    .filter(l => !/^\[[a-z]+:/.test(l))
+                    .map(l => l.replace(/\[\d+:\d+(?:\.\d+)?\]/g, '').trim())
+                    .join('\n').replace(/^\n+|\n+$/g, '');
                 document.getElementById('plainLyrics').value = plainText;
                 showMessage(`Loaded file. Auto-filled ${count} fields.`, 'success');
                 e.target.value = '';
@@ -280,12 +200,10 @@
             reader.readAsText(file);
         });
 
-        // Form Submit
         document.getElementById('publishForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             lockUI(true);
             
-            // Duration Parse
             const dVal = document.getElementById('duration').value.trim();
             let duration = parseFloat(dVal);
             if (dVal.includes(':')) {
@@ -307,15 +225,16 @@
             const enc = (u) => useProxy ? base + encodeURIComponent(u) : u;
 
             try {
-                updateStatus('Requesting challenge...');
+                document.getElementById('miningStatusText').innerText = "Requesting Challenge...";
                 const res = await fetch(enc('https://lrclib.net/api/request-challenge'), { method: 'POST' });
                 if (!res.ok) throw new Error('Could not get challenge. Proxy might be busy.');
                 const { prefix, target } = await res.json();
 
-                updateStatus('Spawning workers for High-Speed Mining...');
+                // START MINING VISUALS
+                document.getElementById('miningStatusText').innerText = "Mining Proof of Work...";
                 const nonce = await solveMultiThreaded(prefix, target);
 
-                updateStatus('Publishing...');
+                document.getElementById('miningStatusText').innerText = "Publishing...";
                 const pubRes = await fetch(enc('https://lrclib.net/api/publish'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-Publish-Token': `${prefix}:${nonce}` },
@@ -334,25 +253,24 @@
             }
         });
 
-        // ================= MULTI-THREADED SOLVER =================
         function solveMultiThreaded(prefix, target) {
-            return new Promise((resolve, reject) => {
-                // Use all cores available (e.g. 8 or 12)
+            return new Promise((resolve) => {
                 const threads = navigator.hardwareConcurrency || 4;
                 const workers = [];
                 let totalHashes = 0;
                 let solved = false;
                 
-                // Update UI throttle
-                let lastUpdate = Date.now();
+                // Progress Bar Variables
+                const startTime = Date.now();
+                const ESTIMATED_DIFFICULTY = 3500000; // Average hashes to find solution
+                let lastUpdate = startTime;
+                let lastHashes = 0;
 
                 for (let i = 0; i < threads; i++) {
                     const w = new Worker(workerUrl);
                     workers.push(w);
-
                     w.onmessage = (msg) => {
-                        if (solved) return; // Already done
-
+                        if (solved) return;
                         if (msg.data.found) {
                             solved = true;
                             terminateAll();
@@ -360,43 +278,71 @@
                         } else {
                             totalHashes += msg.data.count;
                             const now = Date.now();
-                            if (now - lastUpdate > 100) {
-                                updateStatus(`Mining... (${(totalHashes/1000000).toFixed(2)}M hashes) @ ${threads} Threads`);
+                            if (now - lastUpdate > 500) { // Update UI every 500ms
+                                updateProgress(totalHashes, now, startTime, lastHashes, lastUpdate, ESTIMATED_DIFFICULTY);
                                 lastUpdate = now;
+                                lastHashes = totalHashes;
                             }
                         }
                     };
-
-                    // Start worker with a stride
-                    // Worker 0 checks: 0, 4, 8...
-                    // Worker 1 checks: 1, 5, 9...
                     w.postMessage({ prefix, target, startNonce: i, step: threads });
                 }
 
-                function terminateAll() {
-                    workers.forEach(w => w.terminate());
-                }
+                function terminateAll() { workers.forEach(w => w.terminate()); }
             });
+        }
+
+        function updateProgress(total, now, start, prevTotal, prevTime, estimate) {
+            // Speed Calculation
+            const timeDiff = (now - prevTime) / 1000; // in seconds
+            const hashDiff = total - prevTotal;
+            const hashRate = hashDiff / timeDiff; // H/s
+
+            // Format Hashrate (e.g. 1.2M H/s)
+            let rateStr = "";
+            if (hashRate > 1000000) rateStr = (hashRate / 1000000).toFixed(2) + " MH/s";
+            else if (hashRate > 1000) rateStr = (hashRate / 1000).toFixed(0) + " kH/s";
+            else rateStr = hashRate.toFixed(0) + " H/s";
+
+            // Update UI Text
+            document.getElementById('hashRateText').innerText = rateStr;
+            document.getElementById('totalHashesText').innerText = total.toLocaleString() + " Hashes";
+            
+            // Elapsed Time
+            const elapsed = Math.floor((now - start) / 1000);
+            const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const secs = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('elapsedTimeText').innerText = `${mins}:${secs}`;
+
+            // Bar Width Calculation
+            // We cap it at 95% if it goes over estimate so it looks like it's still working
+            let pct = (total / estimate) * 100;
+            if (pct > 95) pct = 95 + (Math.random() * 2); // Jiggle near the end
+            document.getElementById('progressBar').style.width = `${pct}%`;
+
+            // Change color if unlucky
+            const bar = document.getElementById('progressBar');
+            if (total > estimate) {
+                document.getElementById('miningStatusText').innerText = "Mining (Unlucky difficulty, keep waiting)...";
+                bar.classList.remove('bg-md-primary');
+                bar.classList.add('bg-orange-500'); // Warning color
+            } else {
+                bar.classList.add('bg-md-primary');
+                bar.classList.remove('bg-orange-500');
+            }
         }
 
         function lockUI(locked) {
             document.getElementById('submitBtn').disabled = locked;
-            document.getElementById('status').classList.toggle('hidden', !locked);
-            document.getElementById('statusFiller').classList.toggle('hidden', locked);
-            if (!locked) document.getElementById('statusText').innerText = 'Idle';
-        }
-
-        function updateStatus(txt) {
-            document.getElementById('statusText').innerText = txt;
+            document.getElementById('progressSection').classList.toggle('hidden', !locked);
+            document.getElementById('progressSection').classList.toggle('flex', locked);
+            document.getElementById('actionBar').classList.toggle('hidden', locked);
         }
 
         function showMessage(msg, type) {
             const box = document.getElementById('messageBox');
             box.innerText = msg;
-            box.className = `mb-6 rounded-2xl p-5 text-[15px] font-medium shadow-md transition-all ${
-                type === 'success' 
-                ? 'bg-md-successContainer text-md-onSuccessContainer' 
-                : 'bg-md-errorContainer text-md-onErrorContainer'}`;
+            box.className = `mb-6 rounded-2xl p-5 text-[15px] font-medium shadow-md transition-all ${type === 'success' ? 'bg-md-successContainer text-md-onSuccessContainer' : 'bg-md-errorContainer text-md-onErrorContainer'}`;
             box.classList.remove('hidden');
             box.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
